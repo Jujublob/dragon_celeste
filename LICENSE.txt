@@ -1,0 +1,13 @@
+-- ==============================================================================
+-- CRÉDITS ET ATTRIBUTIONS DU MOD DRAGON SÉLESTE
+-- ==============================================================================
+-- • Modèle 3D du dragon, textures du dragon et textures des écailles :
+--   Créés par ElCeejo pour le mod "Draconis" (adaptés et recolorés pour ce mod).
+--
+-- • Modèle 3D et texture de l'œuf de dragon :
+--   Créés par TNT42.dev pour le mod "dragon_seleste".
+--
+-- • Textures d'armure originales :
+--   Créées par stujones11 et maintenues par TenPlus1 pour le mod "3d_armor" 
+--   (recolorées et adaptées pour l'armure séleste).
+-- ==============================================================================
