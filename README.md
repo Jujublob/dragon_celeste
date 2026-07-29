@@ -1,0 +1,3 @@
+# dragon_celeste
+
+Dragon Céleste est un mod pour Minetest Game qui ajoute un dragon surpuissant qui peut spawn sur la map. Le dragon céleste ne s'attaque qu'aux personnes qui l'attaquent. Il drop à sa mort des écailles, des minerais rares en grand nombre, un cristal de boost et un œuf de dragon. Les écailles permettent de crafter une armure incassable et qui rend invincible, ainsi qu'une épée surpuissante incassable elle aussi. Le cristal de boost permet de se mouvoir très rapidement et de littéralement flotter dans l'air lorsqu'il est activé. Si vous voulez faire spawner un dragon céleste, il vous suffit de poser son œuf sur un bloc de célestite. La célestite est craftable avec des fleurs d'étoiles, qui spawn aléatoirement dans les biomes prairies et enneigés.
