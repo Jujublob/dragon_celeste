@@ -420,10 +420,10 @@ mobs:register_mob("dragon_celeste:dragon_celeste", {
 if mobs and mobs.spawn then
     mobs:spawn({
         name = "dragon_celeste:dragon_celeste",
-        nodes = {"air", "default:dirt_with_grass", "default:stone", "default:snowblock", "default:dirt_with_snow", "default:sand", "default:desert_sand", "default:leaves", "default:water_source"},
+        nodes = {"air", "default:dirt_with_grass", "default:snowblock", "default:dirt_with_snow", "default:sand", "default:desert_sand", "default:leaves"},
         min_light = 0,
         max_light = 15,
-        chance = 500000,
+        chance = 100000000000,
         active_object_count = 1,
         min_height = 0,
         max_height = 31000,
