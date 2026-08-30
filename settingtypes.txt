@@ -1,0 +1,11 @@
+[Dragon]
+dragon_celeste_natural_spawn (Dragons spawn naturally) bool true
+dragon_celeste_spawn_chance (Natural spawn rarity, higher = rarer) int 250000 10000 5000000
+dragon_celeste_attack_monsters (Dragons hunt monsters) bool false
+
+[Equipment]
+dragon_celeste_sword_damage (Celestial sword damage) int 24 1 100
+dragon_celeste_armor_defense (Armour defence per piece, %) int 20 1 25
+dragon_celeste_armor_reflect (Damage reflected with full set, %) int 50 0 200
+dragon_celeste_boost_time (Boost duration, seconds) int 30 1 600
+dragon_celeste_boost_cooldown (Boost cooldown, seconds) int 20 0 600
