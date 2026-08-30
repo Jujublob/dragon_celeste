@@ -32,7 +32,7 @@ Dragon model, dragon textures and scale texture
 
 Dragon egg model and texture
     Copyright (c) TNT42.dev -- made for "dragon_celeste".
-    License: CC BY-SA 4.0   <-- donc ici je met la licence que tnt me donne... a la place du CC BY-SA 4.
+    License: MIT
 
 Armour textures (derived from "3d_armor")
     Copyright (c) stujones11, maintained by TenPlus1
