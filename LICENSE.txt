@@ -1,13 +1,45 @@
--- ==============================================================================
--- CRÉDITS ET ATTRIBUTIONS DU MOD DRAGON SÉLESTE
--- ==============================================================================
--- • Modèle 3D du dragon, textures du dragon et textures des écailles :
---   Créés par ElCeejo pour le mod "Draconis" (adaptés et recolorés pour ce mod).
---
--- • Modèle 3D et texture de l'œuf de dragon :
---   Créés par TNT42.dev pour le mod "dragon_seleste".
---
--- • Textures d'armure originales :
---   Créées par stujones11 et maintenues par TenPlus1 pour le mod "3d_armor" 
---   (recolorées et adaptées pour l'armure séleste).
--- ==============================================================================
+=== CODE ===
+
+MIT License
+
+Copyright (c) 2026 Jujublob
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+=== MEDIA ===
+
+Dragon model, dragon textures and scale texture
+    Copyright (c) ElCeejo -- from the "Draconis" mod (MIT License)
+    Modified (recoloured / adapted) by Jujublob, 2026.
+    Source: https://github.com/ElCeejo/draconis
+
+Dragon egg model and texture
+    Copyright (c) TNT42.dev -- made for "dragon_celeste".
+    License: CC BY-SA 4.0   <-- donc ici je met la licence que tnt me donne... a la place du CC BY-SA 4.
+
+Armour textures (derived from "3d_armor")
+    Copyright (c) stujones11, maintained by TenPlus1
+    License: CC BY-SA 3.0
+    https://creativecommons.org/licenses/by-sa/3.0/
+    Recoloured and adapted by Jujublob, 2026.
+    Because these files are derivative works, they remain under CC BY-SA 3.0.
+
+All other textures
+    Copyright (c) 2026 Jujublob -- CC BY-SA 4.0
