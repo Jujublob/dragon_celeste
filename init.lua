@@ -9,7 +9,7 @@
 --   Created by TNT42.dev for "dragon_celeste". 
 --   (Written and explicit authorization from TNT42.dev has been obtained for use and distribution).
 -- • Original armor textures: 
---   Created by stujones11 and maintained by TenPlus1 for "3d_armor" 
+--   Created by davidthecreator (sole texture author of "3d_armor")
 --   (recolored and adapted for celestial armor).
 -- ==============================================================================
 
@@ -146,13 +146,13 @@ minetest.register_craftitem("dragon_celeste:bottes_boost_toggle", {
             boost_time[name] = nil
             boost_cd[name] = BOOST_COOLDOWN
             user:set_physics_override({speed = 1.0, jump = 1.0, gravity = 1.0})
-            minetest.chat_send_player(name, ">>> Anti-gravity DEACTIVATED")
+            minetest.chat_send_player(name, S(">>> Anti-gravity DEACTIVATED"))
         elseif boost_cd[name] then
-            minetest.chat_send_player(name, ">>> Boost recharging (" .. math.ceil(boost_cd[name]) .. "s left)")
+            minetest.chat_send_player(name, S(">>> Boost recharging (@1s left)", math.ceil(boost_cd[name])))
         else
             boost_time[name] = BOOST_DURATION
             user:set_physics_override({speed = 10.0, jump = 1.0, gravity = 0.1})
-            minetest.chat_send_player(name, ">>> Anti-gravity ACTIVATED (" .. BOOST_DURATION .. "s)")
+            minetest.chat_send_player(name, S(">>> Anti-gravity ACTIVATED (@1s)", BOOST_DURATION))
         end
         return itemstack
     end,
@@ -178,7 +178,7 @@ minetest.register_globalstep(function(dtime)
                 boost_time[name] = nil
                 boost_cd[name] = BOOST_COOLDOWN
                 player:set_physics_override({speed = 1.0, jump = 1.0, gravity = 1.0})
-                minetest.chat_send_player(name, ">>> Anti-gravity DEACTIVATED (Time's up)")
+                minetest.chat_send_player(name, S(">>> Anti-gravity DEACTIVATED (Time's up)"))
             end
         elseif boost_cd[name] then
             boost_cd[name] = boost_cd[name] - step
@@ -272,7 +272,7 @@ minetest.register_node("dragon_celeste:oeuf_du_dragon_celeste", {
     after_place_node = function(pos, placer, itemstack, pointed_thing)
         local node_under = minetest.get_node({x = pos.x, y = pos.y - 1, z = pos.z})
         if node_under.name == "dragon_celeste:bloc_celestite" then
-            minetest.chat_send_all("An immense power awakens... The Egg reacts to the Celestite!")
+            minetest.chat_send_all(S("An immense power awakens... The Egg reacts to the Celestite!"))
             minetest.add_particlespawner({
                 amount = 300, time = 3,
                 minpos = {x=pos.x-5, y=pos.y, z=pos.z-5}, maxpos = {x=pos.x+5, y=pos.y+20, z=pos.z+5},
@@ -285,7 +285,7 @@ minetest.register_node("dragon_celeste:oeuf_du_dragon_celeste", {
             end)
         else
             if placer and placer:is_player() then
-                minetest.chat_send_player(placer:get_player_name(), "This egg must be placed on a Celestite Block.")
+                minetest.chat_send_player(placer:get_player_name(), S("This egg must be placed on a Celestite Block."))
             end
         end
     end,
@@ -345,10 +345,10 @@ mobs:register_mob("dragon_celeste:dragon_celeste", {
                 self.tamed = true
                 item:take_item()
                 clicker:set_wielded_item(item)
-                minetest.chat_send_player(player_name, ">>> You are now the absolute Master of this Celestial Dragon!")
+                minetest.chat_send_player(player_name, S(">>> You are now the absolute Master of this Celestial Dragon!"))
                 return
             else
-                minetest.chat_send_player(player_name, ">>> This dragon already has a master!")
+                minetest.chat_send_player(player_name, S(">>> This dragon already has a master!"))
                 return
             end
         end
@@ -368,7 +368,7 @@ mobs:register_mob("dragon_celeste:dragon_celeste", {
                 glow = 14, size = 4,
             })
 
-            minetest.chat_send_player(player_name, ">>> The Celestial Dragon has been fully healed!")
+            minetest.chat_send_player(player_name, S(">>> The Celestial Dragon has been fully healed!"))
             if not minetest.is_creative_enabled(player_name) then
                 item:take_item()
                 clicker:set_wielded_item(item)
@@ -381,11 +381,11 @@ mobs:register_mob("dragon_celeste:dragon_celeste", {
             if self.driver and self.driver == clicker then
                 clicker:set_detach()
                 self.driver = nil
-                minetest.chat_send_player(player_name, ">>> You dismount your celestial steed.")
+                minetest.chat_send_player(player_name, S(">>> You dismount your celestial steed."))
             elseif not self.driver then
                 clicker:set_attach(self.object, "", {x=0, y=200, z=0}, {x=0, y=0, z=0})
                 self.driver = clicker
-                minetest.chat_send_player(player_name, ">>> You are riding the Dragon! Use WASD to fly, Space to ascend, Shift to descend. Right-click again to dismount.")
+                minetest.chat_send_player(player_name, S(">>> You are riding the Dragon! Use WASD to fly, Space to ascend, Shift to descend. Right-click again to dismount."))
             end
         end
     end,
