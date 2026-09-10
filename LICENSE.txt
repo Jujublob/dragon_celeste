@@ -26,7 +26,7 @@ SOFTWARE.
 === MEDIA ===
 
 Dragon model, dragon textures and scale texture
-    Copyright (c) ElCeejo -- from the "Draconis" mod (MIT License)
+    Copyright (c) davidthecreator -- from the "Draconis" mod (MIT License)
     Modified (recoloured / adapted) by Jujublob, 2026.
     Source: https://github.com/ElCeejo/draconis
 
