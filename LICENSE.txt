@@ -26,16 +26,18 @@ SOFTWARE.
 === MEDIA ===
 
 Dragon model, dragon textures and scale texture
-    Copyright (c) davidthecreator -- from the "Draconis" mod (MIT License)
+    Copyright (c) ElCeejo -- from the "Draconis" mod (MIT License)
     Modified (recoloured / adapted) by Jujublob, 2026.
     Source: https://github.com/ElCeejo/draconis
 
 Dragon egg model and texture
     Copyright (c) TNT42.dev -- made for "dragon_celeste".
     License: MIT
+    Note: Written authorization obtained directly from the author granting 
+    permission to use and distribute under MIT terms for this project.
 
 Armour textures (derived from "3d_armor")
-    Copyright (c) stujones11, maintained by TenPlus1
+    Copyright (c) davidthecreator -- sole texture author of "3d_armor"
     License: CC BY-SA 3.0
     https://creativecommons.org/licenses/by-sa/3.0/
     Recoloured and adapted by Jujublob, 2026.
