@@ -1,20 +1,60 @@
 # textdomain: dragon_celeste
+
+### Items & Tools ###
 Celestial Dragon=Dragon Céleste
 Celestial Dragon Scale=Écaille de Dragon Céleste
+Celestial Dragon Sword=Épée du Dragon Céleste
+Deals 10,000 damage to Celestial Dragons, 1,000 to other dragons, 100 to other creatures=Inflige 10 000 dégâts aux Dragons Célestes, 1 000 aux autres dragons, 100 aux autres créatures
 Celestial Sword=Épée Céleste
+Celestial Pickaxe=Pioche Céleste
+Mines almost instantly, in a 3x3 area=Mine presque instantanément, dans une zone de 3x3
 Celestial Helmet=Casque Céleste
 Celestial Chestplate=Plastron Céleste
 Celestial Leggings=Jambières Célestes
 Celestial Boots=Bottes Célestes
+Speed-Jump Crystal=Cristal de Saut Rapide
 Boost Crystal=Cristal de Boost
 Right-click to toggle speed and low gravity=Clic droit pour activer la vitesse et la faible gravité
 Celestial Star Flower=Fleur d'Étoile Céleste
 Feed it to a dragon, or craft Celestite with it=Donne-la à un dragon, ou utilise-la pour crafter de la Célestite
 Celestite Block=Bloc de Célestite
 Celestial Dragon Egg=Œuf de Dragon Céleste
+Place it on a Celestite block to hatch=Posez-le sur un bloc de Célestite pour le faire éclore
 Place it on a Celestite block to hatch a dragon=Pose-le sur un bloc de Célestite pour faire éclore un dragon
+This egg must be placed on a Celestite Block.=Cet œuf doit être posé sur un bloc de Célestite.
+This egg must be placed on a Celestite block.=Cet œuf doit être posé sur un bloc de Célestite.
+
+### Guide Book ###
+Celestial Dragon Guide=Guide du Dragon Céleste
+Explains how to use the mod=Explique comment utiliser le mod
+Close=Fermer
+The Celestial Dragon is a rare boss that never attacks first. Defeat it to obtain celestial materials.=Le Dragon céleste est un boss rare qui n'attaque jamais en premier. Battez-le pour obtenir des matériaux célestes.
+Dragon scales are used to craft the Celestial Sword and the armour set.=Les écailles permettent de fabriquer l'Épée céleste et l'ensemble d'armure.
+Celestial Pickaxe: Mines almost instantly, in a 3x3 area.=Pioche céleste : Elle extrait le minerai presque instantanément, dans une zone de 3x3.
+Celestial Armour: A full set grants near-immunity and reflects part of the damage back to the attacker.=Armure céleste : un ensemble complet confère une quasi-immunité et renvoie une partie des dégâts à l'attaquant.
+Speed-Jump Crystal: Right-click to toggle speed and low gravity. It must then recharge.=Cristal de saut rapide : cliquez avec le bouton droit pour activer un boost de vitesse et d'antigravité. Il doit ensuite se recharger.
+Star Flowers grow in grasslands and snowy biomes. Surround a diamond block with 8 of them to craft a Celestite Block. Place a dragon egg on it to hatch your own dragon.=Les fleurs étoilées poussent dans les prairies et les zones enneigées. Entourez un bloc de diamant de 8 d'entre elles pour fabriquer un bloc de célestite. Placez un œuf de dragon dessus pour faire éclore votre propre dragon.
+Taming: Right-click a dragon with a Speed-Jump Crystal to become its master. It will then follow you. Sneak and right-click with an empty hand to toggle follow or stay.=Apprivoisement : faites un clic droit sur un dragon avec un cristal de saut rapide pour devenir son maître. Il vous suivra alors. Accroupissez-vous et faites un clic droit les mains vides pour qu'il vous suive ou reste sur place.
+Healing: Right-click a dragon with a Star Flower to restore part of its health (or with a Scale for full health).=Soins : faites un clic droit sur un dragon avec une fleur étoilée pour lui restaurer une partie de sa santé (ou avec une écaille pour le soigner entièrement).
+Riding: Right-click your dragon with an empty hand. Look in the direction you want to fly and press forward; jump to ascend, sneak to descend. Right-click again to dismount.=Chevauchée : faites un clic droit sur votre dragon les mains vides. Regardez dans la direction où vous voulez aller et avancez ; sautez pour monter, accroupissez-vous pour descendre. Faites à nouveau un clic droit pour descendre du dragon.
+
+### Messages & HUD ###
+An immense power awakens... The Egg reacts to the Celestite!=Une immense puissance s'éveille... L'Œuf réagit à la Célestite !
+>>> Anti-gravity ACTIVATED (@1s)=>>> Antigravité ACTIVÉE (@1 s)
+>>> Anti-gravity DEACTIVATED=>>> Antigravité DÉSACTIVÉE
+>>> Anti-gravity DEACTIVATED (Time's up)=>>> Antigravité DÉSACTIVÉE (Temps écoulé)
+>>> Boost recharging (@1s left)=>>> Boost en recharge (@1 s restantes)
 Boost enabled (@1s)=Boost activé (@1 s)
 Boost disabled=Boost désactivé
-Boost recharging (@1s left)=Boost en recharge (@1 s restantes)
 The egg trembles...=L'œuf tremble...
-This egg must be placed on a Celestite block.=Cet œuf doit être posé sur un bloc de Célestite.
+>>> You are now the absolute Master of this Celestial Dragon!=>>> Vous êtes maintenant le Maître absolu de ce Dragon Céleste !
+>>> This dragon already has a master!=>>> Ce dragon a déjà un maître !
+>>> The Celestial Dragon has been fully healed!=>>> Le Dragon Céleste a été entièrement soigné !
+>>> The Celestial Dragon has been healed!=>>> Le Dragon Céleste a été soigné !
+>>> You dismount your celestial steed.=>>> Vous descendez de votre monture céleste.
+>>> The dragon will follow you.=>>> Le dragon va vous suivre.
+>>> The dragon will stay here.=>>> Le dragon va rester ici.
+>>> You are riding the Dragon! Use WASD to fly, Space to ascend, Shift to descend. Right-click again to dismount.=>>> Vous chevauchez le Dragon ! Utilisez ZQSD pour voler, Espace pour monter, Maj pour descendre. Clic droit à nouveau pour descendre.
+Dragon HP: @1 / @2=PV Dragon : @1 / @2
+Altitude: @1=Altitude : @1
+Look + forward: fly | Jump: up | Sneak: down | Right-click: dismount=Regarder + avancer : voler | Sauter : monter | S'accroupir : descendre | Clic droit : descendre

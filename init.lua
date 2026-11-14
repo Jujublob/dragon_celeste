@@ -23,7 +23,9 @@ local BOOST_DURATION      = tonumber(settings:get("dragon_celeste_boost_time")) 
 local BOOST_COOLDOWN      = tonumber(settings:get("dragon_celeste_boost_cooldown")) or 20
 local ARMOR_REFLECT_PERCENT = tonumber(settings:get("dragon_celeste_armor_reflect")) or 50
 local ARMOR_DEFENSE       = tonumber(settings:get("dragon_celeste_armor_defense")) or 20
-local SWORD_DAMAGE        = tonumber(settings:get("dragon_celeste_sword_damage")) or 10000
+local SWORD_DAMAGE              = tonumber(settings:get("dragon_celeste_sword_damage")) or 100
+local SWORD_DRAGON_DAMAGE       = tonumber(settings:get("dragon_celeste_sword_dragon_damage")) or 10000
+local SWORD_OTHER_DRAGON_DAMAGE = tonumber(settings:get("dragon_celeste_sword_other_dragon_damage")) or 1000
 local NATURAL_SPAWN       = settings:get_bool("dragon_celeste_natural_spawn", true)
 local SPAWN_CHANCE        = tonumber(settings:get("dragon_celeste_spawn_chance")) or 250000
 local ATTACK_MONSTERS     = settings:get_bool("dragon_celeste_attack_monsters", false)
@@ -59,7 +61,7 @@ minetest.register_craftitem("dragon_celeste:ecaille", {
 -- 2. CELESTIAL DRAGON SWORD (Giant & Particle Trail)
 -- ==============================================================================
 minetest.register_tool("dragon_celeste:epee_du_dragon_celeste", {
-    description = S("Celestial Dragon Sword"),
+    description = S("Celestial Dragon Sword") .. "\n" .. S("Deals 10,000 damage to Celestial Dragons, 1,000 to other dragons, 100 to other creatures"),
     inventory_image = "epee_celeste.png",
     visual_scale = 10.0,
     wield_scale = {x = 10.0, y = 10.0, z = 5.0},
@@ -87,6 +89,66 @@ minetest.register_craft({
 })
 
 -- ==============================================================================
+-- 2b. SWORD BONUS DAMAGE AGAINST OTHER DRAGONS (Draconis, Water Dragons, etc.)
+-- ==============================================================================
+-- Deals 1,000 damage to fire, ice, and water dragons from external mods
+minetest.register_on_mods_loaded(function()
+    for name, def in pairs(minetest.registered_entities) do
+        local lname = name:lower()
+        local is_other_dragon = false
+        if (lname:find("dragon") and not lname:find("dragon_celeste"))
+                or lname:find("draconis")
+                or lname:find("water_dragon")
+                or lname:find("waterdragon") then
+            is_other_dragon = true
+        end
+
+        if is_other_dragon and type(def) == "table" then
+            local orig_on_punch = def.on_punch
+            def.on_punch = function(self, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+                if hitter and hitter:is_player() then
+                    local wielded = hitter:get_wielded_item()
+                    if wielded and wielded:get_name() == "dragon_celeste:epee_du_dragon_celeste" then
+                        local current_hp = self.health or self._hp or self.hp
+                        if not current_hp and self.object then
+                            current_hp = self.object:get_hp()
+                        end
+                        current_hp = current_hp or 0
+
+                        local extra_dmg = SWORD_OTHER_DRAGON_DAMAGE - (damage or 0)
+                        if extra_dmg > 0 then
+                            local new_hp = math.max(0, current_hp - extra_dmg)
+                            self.health = new_hp
+                            if self._hp then self._hp = new_hp end
+                            if self.hp then self.hp = new_hp end
+                            if self.object then
+                                self.object:set_hp(new_hp)
+                            end
+                        end
+
+                        local pos = self.object and self.object:get_pos()
+                        if pos then
+                            minetest.sound_play("default_tool_breaks", {pos = pos, gain = 0.8, max_distance = 25})
+                            minetest.add_particlespawner({
+                                amount = 30, time = 0.4,
+                                minpos = {x = pos.x - 1, y = pos.y + 1, z = pos.z - 1},
+                                maxpos = {x = pos.x + 1, y = pos.y + 4, z = pos.z + 1},
+                                minvel = {x = -3, y = 2, z = -3}, maxvel = {x = 3, y = 5, z = 3},
+                                texture = "default_mese_crystal.png^[colorize:#00ffff:255",
+                                glow = 14, size = 4,
+                            })
+                        end
+                    end
+                end
+                if orig_on_punch then
+                    return orig_on_punch(self, hitter, time_from_last_punch, tool_capabilities, dir, damage)
+                end
+            end
+        end
+    end
+end)
+
+-- ==============================================================================
 -- 2b. CELESTIAL PICKAXE (stratospheric speed, 3x3 area)
 -- ==============================================================================
 local PICKAXE = "dragon_celeste:pioche_celeste"
@@ -112,7 +174,7 @@ minetest.register_tool(PICKAXE, {
 })
 
 do
-    local m = "dragon_celeste:bottes_boost_toggle" -- yellow crystalsdffnffffffffffffffHEREffffffHEREffff
+    local m = "dragon_celeste:bottes_boost_toggle" -- Speed-Jump Crystal
     local sw = "dragon_celeste:epee_du_dragon_celeste"
     minetest.register_craft({
         output = PICKAXE,
@@ -433,15 +495,15 @@ minetest.register_node("dragon_celeste:oeuf_du_dragon_celeste", {
 -- ==============================================================================
 local function guide_text()
     return table.concat({
-        S("Le Dragon céleste est un boss rare qui n'attaque jamais en premier. Battez-le pour obtenir des matériaux céléstes."),
-        S("Les écailles permettent de fabriquer l'Épée céleste et l'ensemble d'armure."),
-        S("Pioch céleste : Elle extrait le minerai presque instantanément, dans une zone de 3x3.»),
-        S(«Armure : un ensemble complet confère une quasi-immunité et renvoie une partie des dégâts à l’attaquant.»),
-        S(«Cristal de saut rapide : cliquez avec le bouton droit pour activer un boost de vitesse et d’antigravité limité dans le temps. Il doit ensuite se recharger.»),
-        S(«Les fleurs étoilées poussent dans les prairies et les zones enneigées. Entourez un bloc de diamant de 8 d’entre elles pour fabriquer un bloc de célestite. Placez un œuf de dragon dessus pour faire éclore votre propre dragon."),
-        S("Apprivoisement : faites un clic droit sur un dragon avec un cristal de saut rapide pour devenir son maître. Il vous suivra alors. Acroupissez vous et faites un click droit la main vide pour qu'il vous suive ou qu'il reste en place."),
-        S("Soins : cliquez avec le bouton droit sur un dragon avec une fleur étoilée pour lui restaurer une partie de sa santé."),
-        S("Chevauchée : cliquez avec le bouton droit sur votre dragon la main vide. Regardez dans la direction où vous voulez aller et appuyez sur la touche « avancer » ; sautez pour monter, mettez-vous à quatre pattes pour descendre. Cliquez à nouveau avec le bouton droit pour descendre du dragon."),
+        S("The Celestial Dragon is a rare boss that never attacks first. Defeat it to obtain celestial materials."),
+        S("Dragon scales are used to craft the Celestial Sword and the armour set."),
+        S("Celestial Pickaxe: Mines almost instantly, in a 3x3 area."),
+        S("Celestial Armour: A full set grants near-immunity and reflects part of the damage back to the attacker."),
+        S("Speed-Jump Crystal: Right-click to toggle speed and low gravity. It must then recharge."),
+        S("Star Flowers grow in grasslands and snowy biomes. Surround a diamond block with 8 of them to craft a Celestite Block. Place a dragon egg on it to hatch your own dragon."),
+        S("Taming: Right-click a dragon with a Speed-Jump Crystal to become its master. It will then follow you. Sneak and right-click with an empty hand to toggle follow or stay."),
+        S("Healing: Right-click a dragon with a Star Flower to restore part of its health (or with a Scale for full health)."),
+        S("Riding: Right-click your dragon with an empty hand. Look in the direction you want to fly and press forward; jump to ascend, sneak to descend. Right-click again to dismount."),
     }, "\n\n")
 end
 
@@ -670,6 +732,27 @@ mobs:register_mob("dragon_celeste:dragon_celeste", {
         if hitter and hitter:is_player() then
             if self.owner and self.owner == hitter:get_player_name() then
                 return true -- Cancel damage if the master hits it
+            end
+            local wielded = hitter:get_wielded_item()
+            if wielded and wielded:get_name() == "dragon_celeste:epee_du_dragon_celeste" then
+                -- Deal 10,000 direct damage to the dragon
+                local current_hp = self.health or self.object:get_hp() or 50000
+                local extra_dmg = SWORD_DRAGON_DAMAGE - (damage or 0)
+                if extra_dmg > 0 then
+                    self.health = current_hp - extra_dmg
+                end
+                local pos = self.object:get_pos()
+                if pos then
+                    minetest.sound_play("default_tool_breaks", {pos = pos, gain = 1.0, max_distance = 30})
+                    minetest.add_particlespawner({
+                        amount = 40, time = 0.5,
+                        minpos = {x = pos.x - 2, y = pos.y + 4, z = pos.z - 2},
+                        maxpos = {x = pos.x + 2, y = pos.y + 12, z = pos.z + 2},
+                        minvel = {x = -4, y = 2, z = -4}, maxvel = {x = 4, y = 6, z = 4},
+                        texture = "default_mese_crystal.png^[colorize:#00ffff:255",
+                        glow = 14, size = 5,
+                    })
+                end
             end
         end
     end,

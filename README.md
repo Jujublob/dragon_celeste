@@ -1,24 +1,26 @@
-# dragon_celeste
-
 # Celestial Dragon (`dragon_celeste`)
 
-A Luanti / Minetest Game mod that adds a rare and extremely powerful boss: the
+![Celestial Dragon](screenshot.png)
+
+A Luanti / Minetest Game mod by **Jujublob** that adds a rare and extremely powerful boss: the
 **Celestial Dragon**. It never attacks first, but killing one rewards you with
 the best endgame gear in the game.
 
 ## Features
 
-* **Celestial Dragon** – a flying boss with a lot of HP that only retaliates
-  when attacked. It does *not* hunt other mobs by default, so it will not wipe
-  out the monsters of your world.
-* **Celestial Scales** – dropped on death, used to craft the gear below.
-* **Celestial Sword** – huge damage, very high durability, glowing particle trail.
-* **Celestial Armour** – a full set gives near-immunity and reflects part of the
-  damage back to the attacker.
-* **Boost Crystal** – a timed anti-gravity + speed boost with a cooldown.
-* **Star Flowers** – rare glowing flowers found in grassland and snowy biomes.
-  They heal / tame dragons and are used to craft **Celestite**.
-* **Dragon Egg** – place it on a Celestite block to hatch your own dragon.
+* **Celestial Dragon** – a flying boss with 30,000–50,000 HP that only retaliates
+  when attacked. It can be tamed, healed, and ridden as a flying mount with HUD stats!
+* **Celestial Scales** – dropped on death, used to craft celestial weapons and armour.
+* **Celestial Sword** – massive damage against Celestial Dragons (**10,000 damage**),
+  heavy damage against other dragons like Draconis and Water Dragons (**1,000 damage**),
+  and **100 damage** against other creatures. Long range and glowing particle trail.
+* **Celestial Pickaxe** – near-instant mining in a 3x3 area with protection checks.
+* **Celestial Armour** – full set grants high defence and reflects damage back to attackers.
+* **Speed-Jump Crystal** – timed anti-gravity + speed boost with a cooldown.
+* **Star Flowers** – glowing flowers found in grassland and snowy biomes, used to heal
+  dragons and craft **Celestite Blocks**.
+* **Dragon Egg** – place it on a Celestite block to hatch your own loyal dragon.
+* **Celestial Guide Book** – in-game illustrated guide explaining all recipes and mechanics.
 
 ## Progression
 
@@ -39,8 +41,12 @@ duration, whether dragons attack monsters).
 
 ## Translations
 
-English is the source language. French is included (`locale/dragon_celeste.fr.tr`).
-Pull requests with new translations are welcome.
+English and French translations are included:
+* English: `locale/dragon_celeste.en.tr`
+* French: `locale/dragon_celeste.fr.tr`
+* Template: `locale/template.txt` (ready for ContentDB / Weblate)
+
+Pull requests with new translations are welcome!
 
 ## License
 

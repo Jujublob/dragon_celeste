@@ -1,0 +1,60 @@
+# textdomain: dragon_celeste
+
+### Items & Tools ###
+Celestial Dragon=
+Celestial Dragon Scale=
+Celestial Dragon Sword=
+Deals 10,000 damage to Celestial Dragons, 1,000 to other dragons, 100 to other creatures=
+Celestial Sword=
+Celestial Pickaxe=
+Mines almost instantly, in a 3x3 area=
+Celestial Helmet=
+Celestial Chestplate=
+Celestial Leggings=
+Celestial Boots=
+Speed-Jump Crystal=
+Boost Crystal=
+Right-click to toggle speed and low gravity=
+Celestial Star Flower=
+Feed it to a dragon, or craft Celestite with it=
+Celestite Block=
+Celestial Dragon Egg=
+Place it on a Celestite block to hatch=
+Place it on a Celestite block to hatch a dragon=
+This egg must be placed on a Celestite Block.=
+This egg must be placed on a Celestite block.=
+
+### Guide Book ###
+Celestial Dragon Guide=
+Explains how to use the mod=
+Close=
+The Celestial Dragon is a rare boss that never attacks first. Defeat it to obtain celestial materials.=
+Dragon scales are used to craft the Celestial Sword and the armour set.=
+Celestial Pickaxe: Mines almost instantly, in a 3x3 area.=
+Celestial Armour: A full set grants near-immunity and reflects part of the damage back to the attacker.=
+Speed-Jump Crystal: Right-click to toggle speed and low gravity. It must then recharge.=
+Star Flowers grow in grasslands and snowy biomes. Surround a diamond block with 8 of them to craft a Celestite Block. Place a dragon egg on it to hatch your own dragon.=
+Taming: Right-click a dragon with a Speed-Jump Crystal to become its master. It will then follow you. Sneak and right-click with an empty hand to toggle follow or stay.=
+Healing: Right-click a dragon with a Star Flower to restore part of its health (or with a Scale for full health).=
+Riding: Right-click your dragon with an empty hand. Look in the direction you want to fly and press forward; jump to ascend, sneak to descend. Right-click again to dismount.=
+
+### Messages & HUD ###
+An immense power awakens... The Egg reacts to the Celestite!=
+>>> Anti-gravity ACTIVATED (@1s)=
+>>> Anti-gravity DEACTIVATED=
+>>> Anti-gravity DEACTIVATED (Time's up)=
+>>> Boost recharging (@1s left)=
+Boost enabled (@1s)=
+Boost disabled=
+The egg trembles...=
+>>> You are now the absolute Master of this Celestial Dragon!=
+>>> This dragon already has a master!=
+>>> The Celestial Dragon has been fully healed!=
+>>> The Celestial Dragon has been healed!=
+>>> You dismount your celestial steed.=
+>>> The dragon will follow you.=
+>>> The dragon will stay here.=
+>>> You are riding the Dragon! Use WASD to fly, Space to ascend, Shift to descend. Right-click again to dismount.=
+Dragon HP: @1 / @2=
+Altitude: @1=
+Look + forward: fly | Jump: up | Sneak: down | Right-click: dismount=
