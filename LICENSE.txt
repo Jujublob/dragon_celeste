@@ -25,23 +25,24 @@ SOFTWARE.
 
 === MEDIA ===
 
-Dragon model, dragon textures and scale texture
-    Copyright (c) ElCeejo -- from the "Draconis" mod (MIT License)
-    Modified (recoloured / adapted) by Jujublob, 2026.
-    Source: https://github.com/ElCeejo/draconis
+Dragon model and dragon textures
+    Created by ElCeejo for the Draconis mod; source: https://github.com/ElCeejo/draconis
+    The source mod's MIT license applies. Adaptations/recolouring by Jujublob.
 
-Dragon egg model and texture
-    Copyright (c) TNT42.dev -- made for "dragon_celeste".
-    License: MIT
-    Note: Written authorization obtained directly from the author granting 
-    permission to use and distribute under MIT terms for this project.
+Dragon egg 3D model (models/dragon_egg.obj)
+    Created by TNT42.dev; source: https://github.com/TNT25190/Oeuf-3D
+    MIT License, as published in that repository's LICENSE file.
+    The OBJ file in this mod is identical to the upstream oeuf.obj.
 
-Armour textures (derived from "3d_armor")
-    Copyright (c) davidthecreator -- sole texture author of "3d_armor"
-    License: CC BY-SA 3.0
+Dragon egg texture (textures/oeuf_du_dragon_celeste.png)
+    The author and license have not been independently verified from the public
+    source repository. Confirm and document these before redistributing this
+    mod through ContentDB; do not infer the texture's license from the model's.
+
+Armour textures (derived from 3d_armor)
+    Texture author: davidthecreator. CC BY-SA 3.0.
     https://creativecommons.org/licenses/by-sa/3.0/
-    Recoloured and adapted by Jujublob, 2026.
-    Because these files are derivative works, they remain under CC BY-SA 3.0.
+    Recoloured/adapted by Jujublob; the derivative textures remain CC BY-SA 3.0.
 
-All other textures
-    Copyright (c) 2026 Jujublob -- CC BY-SA 4.0
+Other textures
+    Copyright (c) 2026 Jujublob. CC BY-SA 4.0.

@@ -1,0 +1,8 @@
+# Egg material for the upstream TNT42.dev OBJ model.
+newmtl m_b232458a-9409-5b56-72ac-1db96ac2f857
+Ka 1.0 1.0 1.0
+Kd 1.0 1.0 1.0
+Ks 0.0 0.0 0.0
+d 1.0
+illum 1
+map_Kd ../textures/oeuf_du_dragon_celeste.png
