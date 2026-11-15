@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- CELESTIAL DRAGON MOD (dragon_celeste)
--- Copyright (c) 2026 - Open Source (MIT License)
+-- Copyright (c) 2026 Jujublob - Open Source (MIT License)
 --
 -- CREDITS & ATTRIBUTIONS:
 -- • Dragon 3D model, dragon textures, and scale texture:
@@ -13,23 +13,25 @@
 -- ==============================================================================
 
 local S = minetest.get_translator("dragon_celeste")
+local modpath = minetest.get_modpath("dragon_celeste")
 
 -- ==============================================================================
 -- SETTINGS & CONSTANTS (read from settingtypes.txt)
 -- ==============================================================================
 local settings = minetest.settings
 
-local BOOST_DURATION      = tonumber(settings:get("dragon_celeste_boost_time")) or 30
-local BOOST_COOLDOWN      = tonumber(settings:get("dragon_celeste_boost_cooldown")) or 20
-local ARMOR_REFLECT_PERCENT = tonumber(settings:get("dragon_celeste_armor_reflect")) or 50
-local ARMOR_DEFENSE       = tonumber(settings:get("dragon_celeste_armor_defense")) or 20
+local BOOST_DURATION            = tonumber(settings:get("dragon_celeste_boost_time")) or 30
+local BOOST_COOLDOWN            = tonumber(settings:get("dragon_celeste_boost_cooldown")) or 20
+local ARMOR_REFLECT_PERCENT     = tonumber(settings:get("dragon_celeste_armor_reflect")) or 50
+local ARMOR_DEFENSE             = tonumber(settings:get("dragon_celeste_armor_defense")) or 20
 local SWORD_DAMAGE              = tonumber(settings:get("dragon_celeste_sword_damage")) or 100
 local SWORD_DRAGON_DAMAGE       = tonumber(settings:get("dragon_celeste_sword_dragon_damage")) or 10000
 local SWORD_OTHER_DRAGON_DAMAGE = tonumber(settings:get("dragon_celeste_sword_other_dragon_damage")) or 1000
-local NATURAL_SPAWN       = settings:get_bool("dragon_celeste_natural_spawn", true)
-local SPAWN_CHANCE        = tonumber(settings:get("dragon_celeste_spawn_chance")) or 250000
-local ATTACK_MONSTERS     = settings:get_bool("dragon_celeste_attack_monsters", false)
-local PICKAXE_3X3         = settings:get_bool("dragon_celeste_pickaxe_3x3", true)
+local NATURAL_SPAWN             = settings:get_bool("dragon_celeste_natural_spawn", true)
+local SPAWN_CHANCE              = tonumber(settings:get("dragon_celeste_spawn_chance")) or 250000
+local ATTACK_MONSTERS           = settings:get_bool("dragon_celeste_attack_monsters", false)
+local PICKAXE_3X3               = settings:get_bool("dragon_celeste_pickaxe_3x3", true)
+local DRAGON_FIRE_BREATH        = settings:get_bool("dragon_celeste_fire_breath", true)
 
 -- Riding / following tuning
 local RIDE_SPEED      = 35
@@ -50,6 +52,22 @@ local function reset_physics(player)
 end
 
 -- ==============================================================================
+-- UTILITY: Safely check if player has full celestial armor
+-- ==============================================================================
+local function count_celestial_armor(player)
+    local inv = player:get_inventory()
+    local list = inv and inv:get_list("armor")
+    if not list then return 0 end
+    local n = 0
+    for _, stack in ipairs(list) do
+        if stack:get_name():find("^dragon_celeste:armure_") then
+            n = n + 1
+        end
+    end
+    return n
+end
+
+-- ==============================================================================
 -- 1. CELESTIAL DRAGON SCALE (Crafting Material)
 -- ==============================================================================
 minetest.register_craftitem("dragon_celeste:ecaille", {
@@ -61,7 +79,8 @@ minetest.register_craftitem("dragon_celeste:ecaille", {
 -- 2. CELESTIAL DRAGON SWORD (Giant & Particle Trail)
 -- ==============================================================================
 minetest.register_tool("dragon_celeste:epee_du_dragon_celeste", {
-    description = S("Celestial Dragon Sword") .. "\n" .. S("Deals 10,000 damage to Celestial Dragons, 1,000 to other dragons, 100 to other creatures"),
+    description = S("Celestial Dragon Sword") .. "\n" ..
+        S("Deals 10,000 damage to Celestial Dragons, 1,000 to other dragons, 100 to other creatures"),
     inventory_image = "epee_celeste.png",
     visual_scale = 10.0,
     wield_scale = {x = 10.0, y = 10.0, z = 5.0},
@@ -149,7 +168,7 @@ minetest.register_on_mods_loaded(function()
 end)
 
 -- ==============================================================================
--- 2b. CELESTIAL PICKAXE (stratospheric speed, 3x3 area)
+-- 2c. CELESTIAL PICKAXE (stratospheric speed, 3x3 area)
 -- ==============================================================================
 local PICKAXE = "dragon_celeste:pioche_celeste"
 
@@ -157,7 +176,7 @@ minetest.register_tool(PICKAXE, {
     description = S("Celestial Pickaxe") .. "\n" .. S("Mines almost instantly, in a 3x3 area"),
     inventory_image = "pioche_celeste.png",
     visual_scale = 10.0,
-    wield_scale = {x = 10.0, y = 10.0, z = 5.0}, -- same size as the sword
+    wield_scale = {x = 10.0, y = 10.0, z = 5.0},
     tool_capabilities = {
         full_punch_interval = 0.3,
         max_drop_level = 3,
@@ -247,7 +266,7 @@ for _, piece in ipairs(armor_pieces) do
     local id, desc, group, eng_id = piece[1], piece[2], piece[3], piece[4]
 
     local def = {
-        description = desc,
+        description = desc .. "\n" .. S("Part of the Celestial set: full set reflects damage"),
         inventory_image = "3d_armor_inv_" .. eng_id .. "_mithril.png^[colorize:#00ffff:120",
         texture = "3d_armor_" .. eng_id .. "_mithril.png^[colorize:#00ffff:120",
         groups = {
@@ -272,23 +291,12 @@ minetest.register_craft({output = "dragon_celeste:armure_plastron", recipe = {{s
 minetest.register_craft({output = "dragon_celeste:armure_jambieres", recipe = {{s, s, s}, {s, "", s}, {s, "", s}}})
 minetest.register_craft({output = "dragon_celeste:armure_bottes", recipe = {{s, "", s}, {s, "", s}}})
 
-local function count_celestial_armor(player)
-    local inv = player:get_inventory()
-    local list = inv and inv:get_list("armor")
-    if not list then return 0 end
-    local n = 0
-    for _, stack in ipairs(list) do
-        if stack:get_name():find("^dragon_celeste:armure_") then
-            n = n + 1
-        end
-    end
-    return n
-end
-
 -- Full set bonus: reflect part of the melee damage back to the attacker.
 -- The `reflecting` guard prevents an endless ping-pong between two players
--- who both wear the full set (bug fix).
+-- who both wear the full set.
 local reflecting = false
+local armor_notified = {} -- track who has been notified of full set
+
 minetest.register_on_player_hpchange(function(player, hp_change, reason)
     if hp_change >= 0 or reflecting then return hp_change end
     if count_celestial_armor(player) < 4 then return hp_change end
@@ -305,6 +313,24 @@ minetest.register_on_player_hpchange(function(player, hp_change, reason)
     end
     return hp_change
 end, true)
+
+-- Notify player when they equip/unequip the full celestial armor set
+minetest.register_globalstep(function(dtime)
+    for _, player in ipairs(minetest.get_connected_players()) do
+        local name = player:get_player_name()
+        local count = count_celestial_armor(player)
+        if count >= 4 and not armor_notified[name] then
+            armor_notified[name] = true
+            minetest.chat_send_player(name, S(">>> Full Celestial Armor set equipped! Damage reflection is active."))
+        elseif count < 4 and armor_notified[name] then
+            armor_notified[name] = nil
+        end
+    end
+end)
+
+minetest.register_on_leaveplayer(function(player)
+    armor_notified[player:get_player_name()] = nil
+end)
 
 -- ==============================================================================
 -- 4. SPEED-JUMP CRYSTAL (Timed Boost with Cooldown)
@@ -332,7 +358,6 @@ minetest.register_craftitem("dragon_celeste:bottes_boost_toggle", {
     inventory_image = "default_mese_crystal.png^[colorize:#00ff00:150",
     stack_max = 1,
     on_use = toggle_boost,
-    -- the description says "right-click": make it true (bug fix)
     on_secondary_use = toggle_boost,
     on_place = function(itemstack, placer, pointed_thing)
         return toggle_boost(itemstack, placer)
@@ -383,6 +408,7 @@ minetest.register_globalstep(function(dtime)
             boost_cd[name] = boost_cd[name] - step
             if boost_cd[name] <= 0 then
                 boost_cd[name] = nil
+                minetest.chat_send_player(name, S(">>> Boost ready!"))
             end
         end
 
@@ -452,8 +478,11 @@ minetest.register_craft({
 })
 
 -- ==============================================================================
--- 8. GIANT DRAGON EGG
+-- 8. GIANT DRAGON EGG (hatching auto-tames the dragon for the placer)
 -- ==============================================================================
+-- We track who placed the egg so the hatched dragon belongs to them.
+local egg_placers = {} -- pos_hash -> player_name
+
 minetest.register_node("dragon_celeste:oeuf_du_dragon_celeste", {
     description = S("Celestial Dragon Egg") .. "\n" .. S("Place it on a Celestite block to hatch"),
     drawtype = "mesh",
@@ -471,6 +500,11 @@ minetest.register_node("dragon_celeste:oeuf_du_dragon_celeste", {
     after_place_node = function(pos, placer, itemstack, pointed_thing)
         local node_under = minetest.get_node({x = pos.x, y = pos.y - 1, z = pos.z})
         if node_under.name == "dragon_celeste:bloc_celestite" then
+            local placer_name = ""
+            if placer and placer:is_player() then
+                placer_name = placer:get_player_name()
+            end
+
             minetest.chat_send_all(S("An immense power awakens... The Egg reacts to the Celestite!"))
             minetest.add_particlespawner({
                 amount = 300, time = 3,
@@ -478,9 +512,39 @@ minetest.register_node("dragon_celeste:oeuf_du_dragon_celeste", {
                 minvel = {x=-2, y=2, z=-2}, maxvel = {x=2, y=10, z=2},
                 texture = "default_mese_crystal.png^[colorize:#ffffff:255", glow = 14,
             })
+
+            -- Sound effect for the hatching
+            minetest.sound_play("default_glass_footstep", {pos = pos, gain = 1.5, max_distance = 50})
+
             minetest.remove_node(pos)
+            -- Also consume the celestite block underneath
+            minetest.remove_node({x = pos.x, y = pos.y - 1, z = pos.z})
+
             minetest.after(2.0, function()
-                minetest.add_entity({x = pos.x, y = pos.y + 2, z = pos.z}, "dragon_celeste:dragon_celeste")
+                local dragon = minetest.add_entity(
+                    {x = pos.x, y = pos.y + 2, z = pos.z},
+                    "dragon_celeste:dragon_celeste"
+                )
+                -- Auto-tame the dragon for the player who placed the egg
+                if dragon and placer_name ~= "" then
+                    local ent = dragon:get_luaentity()
+                    if ent then
+                        ent.owner = placer_name
+                        ent.tamed = true
+                        ent.order = "follow"
+                        -- Set a nametag so the player can see it's theirs
+                        ent.nametag = S("@1's Dragon", placer_name)
+                        ent.object:set_properties({
+                            nametag = ent.nametag,
+                            nametag_color = "#00FFFF",
+                        })
+                        local player = minetest.get_player_by_name(placer_name)
+                        if player then
+                            minetest.chat_send_player(placer_name,
+                                S(">>> A Celestial Dragon has hatched and bonded with you!"))
+                        end
+                    end
+                end
             end)
         else
             if placer and placer:is_player() then
@@ -504,6 +568,8 @@ local function guide_text()
         S("Taming: Right-click a dragon with a Speed-Jump Crystal to become its master. It will then follow you. Sneak and right-click with an empty hand to toggle follow or stay."),
         S("Healing: Right-click a dragon with a Star Flower to restore part of its health (or with a Scale for full health)."),
         S("Riding: Right-click your dragon with an empty hand. Look in the direction you want to fly and press forward; jump to ascend, sneak to descend. Right-click again to dismount."),
+        S("Naming: Sneak and right-click your dragon with the Celestial Guide Book to give it a custom name."),
+        S("Dragon Breath: While riding, press the use key (right-click) to unleash a fire breath attack."),
     }, "\n\n")
 end
 
@@ -608,6 +674,148 @@ minetest.register_on_dieplayer(function(player)
     if d then dismount(d) end
 end)
 
+-- ==============================================================================
+-- 9b. FIRE BREATH ATTACK (while riding, right-click to breathe fire)
+-- ==============================================================================
+local breath_cooldown = {} -- player_name -> time remaining
+
+local function dragon_fire_breath(dragon_ent, rider)
+    local name = rider:get_player_name()
+    if breath_cooldown[name] and breath_cooldown[name] > 0 then
+        minetest.chat_send_player(name, S(">>> Dragon breath recharging (@1s)", math.ceil(breath_cooldown[name])))
+        return
+    end
+
+    local pos = dragon_ent.object:get_pos()
+    local look = rider:get_look_dir()
+    if not pos or not look then return end
+
+    breath_cooldown[name] = 5 -- 5 second cooldown
+
+    -- Visual: fire particles in a cone in front of the dragon
+    local start = {x = pos.x + look.x * 10, y = pos.y + 10 + look.y * 10, z = pos.z + look.z * 10}
+    minetest.add_particlespawner({
+        amount = 150, time = 0.8,
+        minpos = start,
+        maxpos = {x = start.x + look.x * 5, y = start.y + look.y * 5, z = start.z + look.z * 5},
+        minvel = {x = look.x * 20, y = look.y * 20, z = look.z * 20},
+        maxvel = {x = look.x * 40, y = look.y * 40 + 5, z = look.z * 40},
+        minacc = {x = 0, y = -2, z = 0}, maxacc = {x = 0, y = 0, z = 0},
+        minexptime = 0.5, maxexptime = 1.5,
+        minsize = 6, maxsize = 12,
+        texture = "default_torch_on_floor.png^[colorize:#ff6600:200",
+        glow = 14,
+    })
+
+    -- Sound
+    minetest.sound_play("default_cool_lava", {pos = start, gain = 1.2, max_distance = 40})
+
+    -- Damage entities in a cone in front of the dragon
+    local breath_range = 30
+    local breath_dmg = 500
+    local target_pos = {
+        x = pos.x + look.x * breath_range,
+        y = pos.y + 10 + look.y * breath_range,
+        z = pos.z + look.z * breath_range,
+    }
+
+    for _, obj in ipairs(minetest.get_objects_inside_radius(target_pos, breath_range)) do
+        if obj ~= dragon_ent.object and obj ~= rider then
+            local is_player = obj:is_player()
+            local ent = obj:get_luaentity()
+            -- Don't damage the dragon's owner
+            if is_player and obj:get_player_name() == dragon_ent.owner then
+                -- skip owner
+            elseif is_player or (ent and ent.name and ent.name ~= "dragon_celeste:dragon_celeste") then
+                -- Check if the target is roughly in the cone (dot product check)
+                local tpos = obj:get_pos()
+                if tpos then
+                    local dir_to_target = vector.normalize(vector.subtract(tpos, pos))
+                    local dot = look.x * dir_to_target.x + look.y * dir_to_target.y + look.z * dir_to_target.z
+                    if dot > 0.5 then -- within ~60 degree cone
+                        obj:punch(dragon_ent.object, 1.0, {
+                            full_punch_interval = 1.0,
+                            damage_groups = {fleshy = breath_dmg},
+                        })
+                        -- Set target on fire visually
+                        minetest.add_particlespawner({
+                            amount = 20, time = 1.5,
+                            minpos = {x = tpos.x - 0.5, y = tpos.y, z = tpos.z - 0.5},
+                            maxpos = {x = tpos.x + 0.5, y = tpos.y + 2, z = tpos.z + 0.5},
+                            minvel = {x = 0, y = 1, z = 0}, maxvel = {x = 0, y = 3, z = 0},
+                            texture = "default_torch_on_floor.png^[colorize:#ff3300:200",
+                            glow = 14, size = 3,
+                        })
+                    end
+                end
+            end
+        end
+    end
+
+    minetest.chat_send_player(name, S(">>> DRAGON BREATH!"))
+end
+
+-- ==============================================================================
+-- 9c. DRAGON NAMING (sneak + right-click with the Guide Book)
+-- ==============================================================================
+local naming_dragon = {} -- player_name -> dragon entity ref
+
+minetest.register_on_player_receive_fields(function(player, formname, fields)
+    if formname ~= "dragon_celeste:name_dragon" then return false end
+    local name = player:get_player_name()
+    local dragon = naming_dragon[name]
+    naming_dragon[name] = nil
+
+    if not dragon or not dragon.object or not dragon.object:get_pos() then return true end
+
+    if fields.save and fields.dragon_name then
+        local new_name = fields.dragon_name:sub(1, 32) -- limit to 32 chars
+        if new_name ~= "" then
+            dragon.nametag = new_name
+            dragon.object:set_properties({
+                nametag = new_name,
+                nametag_color = "#00FFFF",
+            })
+            minetest.chat_send_player(name, S(">>> Your dragon is now named: @1", new_name))
+        end
+    end
+    return true
+end)
+
+-- ==============================================================================
+-- 9d. /dragon CHAT COMMAND (check your dragon's stats)
+-- ==============================================================================
+minetest.register_chatcommand("dragon", {
+    description = S("Check the status of your tamed Celestial Dragon"),
+    func = function(name, param)
+        local found = false
+        for _, obj in ipairs(minetest.luaentities) do
+            if obj.name == "dragon_celeste:dragon_celeste" and obj.owner == name then
+                local hp = obj.health or 0
+                local max_hp = obj.hp_max or 50000
+                local pos = obj.object and obj.object:get_pos()
+                local pos_str = pos and string.format("(%d, %d, %d)", pos.x, pos.y, pos.z) or "???"
+                local dragon_name = obj.nametag or S("Unnamed")
+                local order = obj.order or "follow"
+
+                minetest.chat_send_player(name,
+                    S(">>> Dragon: @1", dragon_name) .. "\n" ..
+                    S("    HP: @1 / @2", math.floor(hp), math.floor(max_hp)) .. "\n" ..
+                    S("    Position: @1", pos_str) .. "\n" ..
+                    S("    Mode: @1", order))
+                found = true
+            end
+        end
+        if not found then
+            minetest.chat_send_player(name, S(">>> You don't have a tamed Celestial Dragon."))
+        end
+    end,
+})
+
+-- ==============================================================================
+-- 9e. DRAGON ENTITY REGISTRATION
+-- ==============================================================================
+
 local dragon_drops = {
     {name = "dragon_celeste:ecaille", chance = 1, min = 28, max = 29},
     {name = "dragon_celeste:oeuf_du_dragon_celeste", chance = 1, min = 0, max = 1},
@@ -650,6 +858,15 @@ mobs:register_mob("dragon_celeste:dragon_celeste", {
     fly_in = "air",
     static_save = true,
 
+    -- Immunities: lava, fire, fall, drowning
+    immune_to = {
+        {"default:lava_source", 0},
+        {"default:lava_flowing", 0},
+    },
+    fall_damage = false,
+    water_damage = 0,
+    lava_damage = 0,
+
     drops = dragon_drops,
 
     on_rightclick = function(self, clicker)
@@ -658,12 +875,24 @@ mobs:register_mob("dragon_celeste:dragon_celeste", {
         local item_name = item:get_name()
         local creative = minetest.is_creative_enabled(player_name)
 
+        -- 0. FIRE BREATH (while riding, right-click fires breath)
+        if self.dc_rider_name == player_name and DRAGON_FIRE_BREATH then
+            dragon_fire_breath(self, clicker)
+            return
+        end
+
         -- 1. TAME THE DRAGON (Speed-Jump Crystal)
         if item_name == "dragon_celeste:bottes_boost_toggle" then
             if not self.owner or self.owner == "" then
                 self.owner = player_name
                 self.tamed = true
                 self.order = "follow"
+                -- Set nametag
+                self.nametag = S("@1's Dragon", player_name)
+                self.object:set_properties({
+                    nametag = self.nametag,
+                    nametag_color = "#00FFFF",
+                })
                 if not creative then
                     item:take_item()
                     clicker:set_wielded_item(item)
@@ -683,17 +912,20 @@ mobs:register_mob("dragon_celeste:dragon_celeste", {
             else
                 self.health = math.min(max_hp, (self.health or 0) + 5000)
             end
+            -- BUG FIX: Update self.object HP to match self.health
             self.object:set_hp(self.health)
             minetest.sound_play("default_dig_snappy", {object = self.object, gain = 1.0, max_distance = 20})
 
             local pos = self.object:get_pos()
-            minetest.add_particlespawner({
-                amount = 40, time = 1,
-                minpos = {x=pos.x-5, y=pos.y+5, z=pos.z-5}, maxpos = {x=pos.x+5, y=pos.y+20, z=pos.z+5},
-                minvel = {x=0, y=2, z=0}, maxvel = {x=0, y=5, z=0},
-                texture = "heart.png",
-                glow = 14, size = 4,
-            })
+            if pos then
+                minetest.add_particlespawner({
+                    amount = 40, time = 1,
+                    minpos = {x=pos.x-5, y=pos.y+5, z=pos.z-5}, maxpos = {x=pos.x+5, y=pos.y+20, z=pos.z+5},
+                    minvel = {x=0, y=2, z=0}, maxvel = {x=0, y=5, z=0},
+                    texture = "heart.png",
+                    glow = 14, size = 4,
+                })
+            end
 
             if item_name == "dragon_celeste:ecaille" then
                 minetest.chat_send_player(player_name, S(">>> The Celestial Dragon has been fully healed!"))
@@ -707,7 +939,27 @@ mobs:register_mob("dragon_celeste:dragon_celeste", {
             return
         end
 
-        -- 3. OWNER ACTIONS (empty hand)
+        -- 3. NAME THE DRAGON (sneak + right-click with Guide Book)
+        if self.tamed and self.owner == player_name
+                and item_name == "dragon_celeste:livre_celeste" then
+            local ctrl = clicker:get_player_control()
+            if ctrl.sneak then
+                naming_dragon[player_name] = self
+                local current_name = self.nametag or ""
+                local fs = "formspec_version[4]size[8,4]" ..
+                    "label[0.5,0.6;" .. minetest.formspec_escape(S("Name your Dragon")) .. "]" ..
+                    "field[0.5,1.3;7,0.8;dragon_name;;" ..
+                        minetest.formspec_escape(current_name) .. "]" ..
+                    "button_exit[2,2.8;4,0.8;save;" .. minetest.formspec_escape(S("Save")) .. "]"
+                minetest.show_formspec(player_name, "dragon_celeste:name_dragon", fs)
+                return
+            end
+            -- Otherwise just open the guide
+            show_guide(clicker)
+            return
+        end
+
+        -- 4. OWNER ACTIONS (empty hand)
         if self.tamed and self.owner == player_name and item_name == "" then
             local ctrl = clicker:get_player_control()
             if self.dc_rider_name == player_name then
@@ -730,17 +982,40 @@ mobs:register_mob("dragon_celeste:dragon_celeste", {
 
     on_punch = function(self, hitter, time_from_last_punch, tool_capabilities, dir, damage)
         if hitter and hitter:is_player() then
+            -- Owner can never damage their own dragon
             if self.owner and self.owner == hitter:get_player_name() then
-                return true -- Cancel damage if the master hits it
+                return true -- Cancel damage
             end
+
+            -- Tamed dragons take 80% less damage from other players (protection)
+            if self.tamed and self.owner and self.owner ~= "" then
+                local wielded = hitter:get_wielded_item()
+                if wielded and wielded:get_name() == "dragon_celeste:epee_du_dragon_celeste" then
+                    -- Celestial sword still deals full bonus damage
+                    local current_hp = self.health or 50000
+                    local extra_dmg = SWORD_DRAGON_DAMAGE - (damage or 0)
+                    if extra_dmg > 0 then
+                        self.health = current_hp - extra_dmg
+                    end
+                else
+                    -- Other weapons: 80% damage reduction on tamed dragons
+                    self.health = (self.health or 50000) - math.floor((damage or 0) * 0.2)
+                end
+            else
+                -- Wild dragon: Celestial sword bonus
+                local wielded = hitter:get_wielded_item()
+                if wielded and wielded:get_name() == "dragon_celeste:epee_du_dragon_celeste" then
+                    local current_hp = self.health or self.object:get_hp() or 50000
+                    local extra_dmg = SWORD_DRAGON_DAMAGE - (damage or 0)
+                    if extra_dmg > 0 then
+                        self.health = current_hp - extra_dmg
+                    end
+                end
+            end
+
+            -- Visual feedback for sword hits
             local wielded = hitter:get_wielded_item()
             if wielded and wielded:get_name() == "dragon_celeste:epee_du_dragon_celeste" then
-                -- Deal 10,000 direct damage to the dragon
-                local current_hp = self.health or self.object:get_hp() or 50000
-                local extra_dmg = SWORD_DRAGON_DAMAGE - (damage or 0)
-                if extra_dmg > 0 then
-                    self.health = current_hp - extra_dmg
-                end
                 local pos = self.object:get_pos()
                 if pos then
                     minetest.sound_play("default_tool_breaks", {pos = pos, gain = 1.0, max_distance = 30})
@@ -759,6 +1034,24 @@ mobs:register_mob("dragon_celeste:dragon_celeste", {
 
     on_die = function(self, pos)
         dismount(self)
+        -- Death announcement if the dragon was tamed
+        if self.owner and self.owner ~= "" then
+            local dragon_name = self.nametag or S("Celestial Dragon")
+            minetest.chat_send_player(self.owner,
+                S(">>> Your dragon @1 has fallen!", dragon_name))
+        end
+        -- Epic death particles
+        if pos then
+            minetest.add_particlespawner({
+                amount = 200, time = 2,
+                minpos = {x=pos.x-5, y=pos.y, z=pos.z-5},
+                maxpos = {x=pos.x+5, y=pos.y+20, z=pos.z+5},
+                minvel = {x=-5, y=5, z=-5}, maxvel = {x=5, y=15, z=5},
+                texture = "default_mese_crystal.png^[colorize:#00ffff:255",
+                glow = 14, size = 8,
+            })
+            minetest.sound_play("default_cool_lava", {pos = pos, gain = 2.0, max_distance = 60})
+        end
     end,
 
     -- do_custom is the Mobs Redo hook run every step; returning false skips
@@ -778,6 +1071,17 @@ mobs:register_mob("dragon_celeste:dragon_celeste", {
                 texture = "default_mese_crystal.png^[colorize:#00ffff:255",
                 glow = 14,
             })
+        end
+
+        -- BREATH COOLDOWN TIMER
+        if self.dc_rider_name then
+            local rname = self.dc_rider_name
+            if breath_cooldown[rname] and breath_cooldown[rname] > 0 then
+                breath_cooldown[rname] = breath_cooldown[rname] - dtime
+                if breath_cooldown[rname] <= 0 then
+                    breath_cooldown[rname] = nil
+                end
+            end
         end
 
         local rot = self.rotate or 0
@@ -810,16 +1114,22 @@ mobs:register_mob("dragon_celeste:dragon_celeste", {
             self.object:set_acceleration({x = 0, y = 0, z = 0})
             self.object:set_velocity({x = vx, y = vy, z = vz})
 
-            -- HUD (refreshed twice per second)
+            -- HUD (refreshed twice per second) — BUG FIX: use self.health not get_hp()
             self.dc_hud_acc = (self.dc_hud_acc or 0) + dtime
             if self.dc_hud_acc >= 0.5 and huds[rname] then
                 self.dc_hud_acc = 0
-                local hp = math.floor(self.object:get_hp() or self.health or 0)
+                local hp = math.floor(self.health or 0)
                 local max_hp = math.floor(self.hp_max or 50000)
                 local alt = math.floor(pos.y)
+                local breath_status = ""
+                if breath_cooldown[rname] and breath_cooldown[rname] > 0 then
+                    breath_status = "  " .. S("Breath: @1s", math.ceil(breath_cooldown[rname]))
+                else
+                    breath_status = "  " .. S("Breath: READY")
+                end
                 rider:hud_change(huds[rname], "text",
-                    S("Dragon HP: @1 / @2", hp, max_hp) .. "   " .. S("Altitude: @1", alt) .. "\n" ..
-                    S("Look + forward: fly | Jump: up | Sneak: down | Right-click: dismount"))
+                    S("Dragon HP: @1 / @2", hp, max_hp) .. "   " .. S("Altitude: @1", alt) .. breath_status .. "\n" ..
+                    S("Look + forward: fly | Jump: up | Sneak: down | Right-click: fire breath"))
             end
             return false
         end
@@ -871,3 +1181,8 @@ if NATURAL_SPAWN and mobs and mobs.spawn then
         spawn_by = "air",
     })
 end
+
+-- ==============================================================================
+-- 11. LOG
+-- ==============================================================================
+minetest.log("action", "[dragon_celeste] Celestial Dragon mod loaded successfully!")
